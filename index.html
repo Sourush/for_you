@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Someone Special 🖤</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle var(--duration) ease-in-out infinite alternate;
+        }
+        @keyframes twinkle {
+            0% { opacity: 0.2; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1.2); }
+        }
+
+        .grid-photo {
+            opacity: 0;
+            transform: scale(0.9) translateY(20px);
+            animation: revealPhoto 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            animation-delay: var(--delay);
+        }
+        @keyframes revealPhoto {
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .force-clickable {
+            cursor: pointer !important;
+            pointer-events: auto !important;
+            z-index: 999 !important;
+        }
+
+        #no-btn {
+            transition: all 0.15s ease-out;
+        }
+
+        .custom-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.02);
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: rgba(244, 63, 94, 0.2);
+            border-radius: 10px;
+        }
+
+        .scrolling-content {
+            transition: filter 2s ease;
+        }
+
+        /* Rose Petal Falling Animation */
+        .petal {
+            position: absolute;
+            background: #e11d48;
+            border-radius: 150% 0 150% 150%;
+            opacity: 0.7;
+            pointer-events: none;
+            animation: fadeAndFall var(--fall-speed) linear forwards;
+            z-index: 40;
+        }
+        @keyframes fadeAndFall {
+            0% { transform: translateY(-10px) rotate(0deg); opacity: 0.8; }
+            100% { transform: translateY(105vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* Floating Polaroid Elements Animation (Option 2) */
+        .floating-polaroid {
+            position: absolute;
+            background: #1f2833;
+            padding: 8px;
+            border-radius: 6px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.05);
+            opacity: 0;
+            transform: translateY(40px) scale(0.9);
+            transition: all 3s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+            z-index: 10;
+        }
+        .floating-polaroid img {
+            width: 110px;
+            height: 110px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+        .floating-polaroid.active {
+            opacity: 0.25; 
+            transform: translateY(0) scale(1) var(--custom-rotate);
+            animation: smoothFloat 8s ease-in-out infinite alternate;
+        }
+        @keyframes smoothFloat {
+            0% { transform: translateY(0) var(--custom-rotate); }
+            100% { transform: translateY(-15px) var(--custom-rotate); }
+        }
+
+        /* Heartbeat Flash Effect */
+        .heartbeat-flash {
+            animation: flashOverlay 1.2s ease-in-out forwards;
+        }
+        @keyframes flashOverlay {
+            0% { filter: blur(0px) brightness(1); }
+            40% { filter: blur(8px) brightness(0.4); }
+            60% { filter: blur(2px) brightness(0.7); }
+            100% { filter: blur(0px) brightness(1); }
+        }
+    </style>
+</head>
+<body class="bg-[#0b0c10] text-gray-200 font-sans overflow-x-hidden relative min-h-screen select-none">
+
+    <!-- Cinematic Pre-loader Timer -->
+    <div id="cinematic-timer" class="fixed inset-0 bg-[#0b0c10] z-[100] flex flex-col items-center justify-center transition-opacity duration-1000">
+        <div class="text-center space-y-4">
+            <p class="text-xs font-mono tracking-widest text-gray-500 uppercase">Initializing Experience</p>
+            <div id="countdown-number" class="text-6xl md:text-8xl font-extrabold text-transparent bg-clip-text bg-gradient-to-b from-[#45f3ff] to-indigo-500">
+                3
+            </div>
+            <!-- Click Overlay Trigger for Music Autoplay Rule Fix -->
+            <div id="click-prompt" class="text-sm font-light text-rose-400 tracking-wider hidden animate-pulse mt-4 cursor-pointer border border-rose-500/20 px-4 py-2 rounded-full bg-rose-500/5">
+                Click anywhere to enter into memories... 🎧
+            </div>
+        </div>
+    </div>
+
+    <audio id="bg-music" src="D:\another_one\sanam-mere-mehboob-qayamat-hogi-128-ytshorts.savetube.me.mp3" loop></audio>
+
+    <canvas id="heartCanvas" class="absolute inset-0 pointer-events-none z-10"></canvas>
+
+    <!-- Floating Background Polaroids Container -->
+    <div id="ambient-photos-container" class="absolute inset-0 pointer-events-none overflow-hidden hidden">
+        <div class="floating-polaroid" style="top: 15%; left: 8%; --custom-rotate: rotate(-8deg);">
+            <img src="D:\another_one\images\pic2 (6).jpg">
+        </div>
+        <div class="floating-polaroid" style="top: 20%; right: 10%; --custom-rotate: rotate(10deg);">
+            <img src="D:\another_one\images\pic2 (7).jpg">
+        </div>
+        <div class="floating-polaroid" style="bottom: 15%; left: 12%; --custom-rotate: rotate(6deg);">
+            <img src="D:\another_one\images\pic1.jpg">
+        </div>
+    </div>
+
+    <!-- POP-UP 2: Emotional Warning -->
+    <div id="popup-2" class="fixed inset-0 z-40 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-1000 overflow-hidden">
+        <div class="absolute inset-0 z-[-1] opacity-40 pointer-events-none">
+            <iframe class="w-full h-full scale-150 object-cover" src="D:\another_one\VID-20260512-WA0006.mp4" frameborder="0" allow="autoplay; encrypted-media"></iframe>
+        </div>
+        <div class="bg-[#050508]/90 backdrop-blur-md border border-rose-500/20 p-8 rounded-2xl max-w-sm w-full text-center shadow-2xl">
+            <p class="text-lg italic text-rose-300 mb-6">"Every small moment with you is a core memory..."</p>
+            <button onclick="revealMainSite()" class="border border-rose-500/50 hover:bg-rose-500/10 text-rose-400 font-medium px-6 py-2.5 rounded-xl cursor-pointer transition-all force-clickable">
+                Promise I won't cry 🫠
+            </button>
+        </div>
+    </div>
+
+    <!-- POP-UP 3: Trap Card -->
+    <div id="popup-trap" class="fixed inset-0 bg-[#050508]/95 z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-1000">
+        <div id="trap-card" class="bg-[#1f2833]/90 backdrop-blur-md border border-purple-500/30 p-8 rounded-2xl max-w-sm w-full text-center shadow-2xl relative min-h-[260px] overflow-hidden flex flex-col justify-center items-center">
+            <h3 class="text-lg font-medium text-purple-300 mb-2" id="trap-title">Are you enjoying this website? 🫠</h3>
+            <p class="text-xs text-rose-400 mb-6 hidden" id="trap-warning">Galat jawab! "No" bolne ka option nahi hai yahan. 🤫</p>
+            
+            <div class="w-full flex flex-col sm:flex-row justify-center items-center gap-4 mt-2 h-16 relative">
+                <button onclick="goToIntermediateScreen()" class="bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-medium px-6 py-2 rounded-xl force-clickable shadow-lg shadow-emerald-600/20 transition-all z-20">
+                    Yes, absolutely ❤️
+                </button>
+                <button id="no-btn" onmouseover="trollNoButton()" onclick="trollNoButton()" class="bg-rose-700 text-white text-sm font-medium px-6 py-2 rounded-xl absolute z-30 transition-all duration-150 force-clickable" style="left: 60%; top: 16px;">
+                    No 😤
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <main id="main-content" class="hidden opacity-0 transition-opacity duration-1000 min-h-screen flex flex-col items-center justify-center relative p-6 z-20">
+        
+        <div class="absolute inset-0 z-[-1] opacity-20 pointer-events-none overflow-hidden">
+            <iframe class="w-full h-full scale-135 object-cover" src="D:\another_one\VID-20260512-WA0006.mp4" frameborder="0" allow="autoplay; encrypted-media"></iframe>
+        </div>
+
+        <!-- SCREEN A: Hey Special Person -->
+        <div id="screen-initial" class="max-w-2xl text-center space-y-8 transition-all duration-1000 flex flex-col items-center relative min-h-[450px] justify-center">
+            
+            <div id="teaser-message" class="absolute inset-0 flex items-center justify-center bg-[#0b0c10]/95 z-30 hidden opacity-0 transition-all duration-700">
+                <p class="text-base md:text-lg font-mono text-rose-400 animate-pulse text-center px-4 tracking-wider">
+                    Don't quit yet... <br><span class="text-xs text-gray-400">Something beautiful is unfolding for you. 🤫</span>
+                </p>
+            </div>
+
+            <div id="initial-main-layout" class="space-y-8 flex flex-col items-center transition-opacity duration-500">
+                <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight bg-gradient-to-r from-rose-400 via-indigo-300 to-cyan-400 bg-clip-text text-transparent">
+                    Hey Special Person...
+                </h1>
+                
+                <div class="inline-block bg-[#1f2833] p-4 rounded-xl shadow-2xl transform -rotate-2 border border-white/10">
+                    <img src="D:\another_one\images\IMG_20260526_225343.jpg" alt="First Memory" class="rounded shadow-inner max-h-64 object-cover">
+                    <p class="mt-3 font-mono text-xs text-gray-400 text-left">📍 Where it all started...</p>
+                </div>
+
+                <p class="text-base leading-relaxed text-gray-300 font-light max-w-xl mx-auto italic">
+                    "I still remember this exact day. Everything felt so perfect, yet so fleeting... Kuch baatein adhuri hi achhi lagti hain." 💔
+                </p>
+            </div>
+
+            <div id="timed-trigger-container" class="opacity-0 translate-y-10 transition-all duration-1000 mt-6 z-10" style="pointer-events: none;">
+                <button id="memories-btn" onclick="switchToNextScreen()" class="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-mono text-xs tracking-wider px-6 py-3 rounded-full shadow-lg shadow-indigo-500/30 active:scale-95 transition-transform duration-300">
+                    👉 Click here to unfold baki ki yaadein...
+                </button>
+            </div>
+        </div>
+
+
+        <!-- SCREEN B: Gallery Grid -->
+        <div id="screen-gallery" class="hidden opacity-0 max-w-4xl w-full text-center space-y-10 transition-all duration-1000 py-10 flex flex-col items-center">
+            <h2 class="text-2xl font-light tracking-widest text-rose-400 uppercase"> Unforgotten Chapters</h2>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 w-full">
+                <div class="grid-photo bg-[#1f2833] p-3 rounded-lg shadow-xl border border-white/5 transform rotate-1" style="--delay: 0.2s">
+                    <img src="D:\another_one\images\pic2 (6).jpg" class="rounded w-full h-48 object-cover">
+                    <p class="mt-2 text-xs font-mono text-gray-400">The way you smile ☀️</p>
+                </div>
+                <div class="grid-photo bg-[#1f2833] p-3 rounded-lg shadow-xl border border-white/5 transform -rotate-2" style="--delay: 0.5s">
+                    <img src="D:\another_one\images\pic2 (7).jpg" class="rounded w-full h-48 object-cover">
+                    <p class="mt-2 text-xs font-mono text-gray-400">When the sky matched your mood 🌅</p>
+                </div>
+                <div class="grid-photo bg-[#1f2833] p-3 rounded-lg shadow-xl border border-white/5 transform rotate-3" style="--delay: 0.8s">
+                    <img src="D:\another_one\images\pic1.jpg" class="rounded w-full h-48 object-cover">
+                    <p class="mt-2 text-xs font-mono text-gray-400">The silhouette of your smile 🌙</p>
+                </div>
+            </div>
+
+            <p class="text-sm font-light text-gray-400 max-w-xl mx-auto pt-4 leading-relaxed">
+                Ye saari photos mere paas sirf images nahi hain... ye tumhari sabse payri yaadein hain !
+            </p>
+
+            <div class="pt-6">
+                <button id="gallery-next-btn" onclick="triggerTrapPopup()" class="bg-gradient-to-r from-rose-600 to-purple-600 hover:from-rose-500 hover:to-purple-500 text-white font-mono text-xs tracking-widest px-8 py-3.5 rounded-xl shadow-xl shadow-purple-900/40 transition-all duration-300 hover:scale-105 force-clickable">
+                    Go Deeper into Memories... ⏩
+                </button>
+            </div>
+        </div>
+
+
+        <!-- SCREEN C: Timer Counter & Dynamic Scroller -->
+        <div id="screen-intermediate" class="hidden opacity-0 max-w-2xl w-full text-center space-y-6 transition-all duration-1000 py-6 flex flex-col items-center">
+            <div class="bg-neutral-950/60 border border-rose-500/10 rounded-2xl px-6 py-4 max-w-md w-full shadow-inner">
+                <p class="text-[10px] font-mono tracking-widest text-gray-500 uppercase mb-2">Time passed since our first photo...</p>
+                <div id="timeline-counter" class="font-mono text-lg md:text-xl font-bold bg-gradient-to-r from-rose-400 to-purple-400 bg-clip-text text-transparent">
+                    00d 00h 00m 00s 000ms
+                </div>
+            </div>
+
+            <div id="scroll-box" class="bg-[#12121c]/60 border border-white/5 p-6 md:p-8 rounded-2xl max-w-xl w-full h-[320px] overflow-y-auto custom-scroll relative">
+                <div id="scrolling-text" class="scrolling-content space-y-8 text-left pb-20">
+                    <div>
+                        <h4 class="text-xs font-mono text-rose-400 mb-2">● Fragment of memory</h4>
+                        <p class="text-sm md:text-base leading-relaxed text-gray-300 font-light italic">
+                            Waqt bohot tezi se aage nikal gaya, par mera ek hissa aaj bhi wahi thehra hua hai. Log kehte hain move on kar lo, par unhe kaise samjhaun ki kuch yaadein mitaane ke liye nahi, poori zindagi sambhalne ke liye hoti hain.
+                        </p>
+                    </div>
+
+                    <div class="space-y-4 border-l border-purple-500/20 pl-4">
+                        <h4 class="text-xs font-mono text-purple-400">● The Unanswered Questions...</h4>
+                        <p class="text-sm italic text-gray-300 font-light">
+                            "Kya tum bhi kabhi un purane gaano ko sunkar thoda ruk jaate ho, ya unhe skip kar dete ho? jo maine bheje the ?"
+                        </p>
+                        <p class="text-sm italic text-gray-300 font-light">
+                            "kya tumhe meri jarasi bhi kami mehsoos hoti hai? ya tumne mujhe puri tarah se bhula diya hai?"
+                        </p>
+                        <p class="text-sm italic text-gray-300 font-light">
+                            "Agar tumhe meri kami nahi mehsoos hoti, toh kya tumne apne dil se meri jagah hata di hai? ya tumne us jagah ko kisi aur se bhar diya hai?"
+                        </p>
+                    </div>
+
+                    <div class="pt-4">
+                        <h4 class="text-xs font-mono text-neutral-500 mb-2">● The Bitter Truth</h4>
+                        <p class="text-sm leading-relaxed text-neutral-400 font-light">
+                            Ab shayad sound dheere dheere madham ho rha hai... bilkul hamari kahani ki tarah. Aur ye text jo aap padh rahe ho, dhundla ho raha hai na? Shayad ye screen ka fault nahi... shayad kuch yaadein aankhon me paani ban kar thahar jaati hain. 🫠💔
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pt-4">
+                <button onclick="goToFinalScreen()" class="border-b border-rose-500/40 hover:border-rose-500 text-rose-400 font-mono text-xs tracking-widest pb-1 cursor-pointer transition-all force-clickable">
+                    [ Open the final letter... 🖤 ]
+                </button>
+            </div>
+        </div>
+
+
+        <!-- SCREEN D: THE GRAND CLIMAX -->
+        <div id="screen-final" class="max-w-2xl w-full text-center space-y-8 transition-all duration-1000 py-12 flex flex-col items-center hidden opacity-0">
+            
+            <div id="final-main-block" class="space-y-8 flex flex-col items-center w-full transition-opacity duration-1000">
+                <h2 class="text-3xl font-extralight tracking-widest text-neutral-100">The Last Chapter... 🖤</h2>
+                <div class="w-16 h-[1px] bg-rose-500/50 my-2"></div>
+                
+                <div class="min-h-[140px] flex items-center justify-center">
+                    <p id="typing-text" class="text-base leading-relaxed text-neutral-300 font-light max-w-xl italic text-center"></p>
+                </div>
+
+                <div id="flower-panel" class="pt-8 transition-all duration-700 opacity-0 transform translate-y-4">
+                    <button id="flower-btn" onclick="triggerFlowerEnding()" class="border border-rose-500/40 bg-rose-500/5 hover:bg-rose-500/20 text-rose-300 font-mono text-xs tracking-widest px-6 py-3 rounded-xl transition-all shadow-lg force-clickable">
+                        Leave a red rose for memories 🌹
+                    </button>
+                    <div id="final-tagline" class="text-lg text-rose-600/80 pt-6 font-light tracking-widest opacity-0 transition-opacity duration-1000 mt-2">
+                        Always & Forever ❤️
+                    </div>
+                </div>
+            </div>
+
+            <!-- UPGRADED FULL-SCREEN CLIMAX OVERLAY LAYER -->
+            <div id="climax-goodbye-layer" class="fixed inset-0 bg-[#050508] z-50 flex flex-col items-center justify-center hidden opacity-0 transition-opacity duration-1000">
+                
+                <!-- Full Screen Image Container with Vignette effect -->
+                <div id="climax-special-photo" class="absolute inset-0 w-full h-full flex items-center justify-center transition-opacity duration-[2500ms] ease-in-out">
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#050508] via-transparent to-[#050508] z-10"></div>
+                    <img src="D:\another_one\images\IMG_20260526_225343.jpg" class="w-full h-full object-cover opacity-80 filter brightness-90">
+                    <p class="absolute bottom-12 left-1/2 transform -translate-x-1/2 z-20 font-mono text-xs text-gray-400 tracking-widest bg-black/40 backdrop-blur-sm px-4 py-2 rounded-full border border-white/5">Hamesha ke liye mere dil me... 🔒</p>
+                </div>
+
+                <!-- Last Thank You Text Container -->
+                <p id="thankyou-msg" class="text-xl md:text-2xl font-light font-serif text-rose-100 tracking-widest text-center max-w-lg hidden opacity-0 transition-opacity duration-[1500ms] italic px-6 z-30"></p>
+            </div>
+
+        </div>
+
+    </main>
+
+    <script>
+        const audio = document.getElementById('bg-music');
+        let counterInterval;
+        let cinematicInterval;
+        let typingInterval;
+
+        // Upgraded Autoplay Handshake Engine
+        window.onload = function() {
+            const countdownNumber = document.getElementById('countdown-number');
+            const clickPrompt = document.getElementById('click-prompt');
+            let timeLeft = 3;
+
+            const timer = setInterval(() => {
+                timeLeft--;
+                if (timeLeft > 0) {
+                    countdownNumber.innerText = timeLeft;
+                } else {
+                    clearInterval(timer);
+                    countdownNumber.innerText = "✨";
+                    
+                    // Show click handler instantly to sync up music with user gesture
+                    setTimeout(() => {
+                        countdownNumber.classList.add('hidden');
+                        clickPrompt.classList.remove('hidden');
+                        // Capture any global click on viewport to trigger audio safely
+                        document.body.classList.add('cursor-pointer');
+                        document.body.addEventListener('click', startExperienceWithMusic, { once: true });
+                    }, 500);
+                }
+            }, 1000);
+        };
+
+        const targetDate = new Date(2024, 8, 1, 18, 0, 0); 
+        const finalLetterText = "Agar aap yahan tak aa gaye ho, toh bas itna jaan lo... Ki waqt badal sakta hai, log badal sakte hain, par jo jagah aapki mere dil me hai na, wo koi aur nahi le payega. You will always be my favorite 'what if'. 🫠❤️";
+
+        function startExperienceWithMusic() {
+            // Audio starts exactly at user interaction right after counter finish
+            audio.play().catch(e => console.log("Audio play blocked by ecosystem:", e));
+            
+            const timerOverlay = document.getElementById('cinematic-timer');
+            timerOverlay.classList.add('opacity-0');
+            
+            setTimeout(() => {
+                timerOverlay.classList.add('hidden');
+                document.body.classList.remove('cursor-pointer');
+                
+                const p2 = document.getElementById('popup-2');
+                p2.classList.remove('hidden');
+                setTimeout(() => p2.classList.add('opacity-100'), 50);
+            }, 1000);
+        }
+
+        function revealMainSite() {
+            const p2 = document.getElementById('popup-2');
+            p2.classList.remove('opacity-100');
+            p2.classList.add('opacity-0');
+            
+            setTimeout(() => {
+                p2.classList.add('hidden');
+                const main = document.getElementById('main-content');
+                main.classList.remove('hidden');
+                setTimeout(() => {
+                    main.classList.add('opacity-100');
+                    initSpecialEffects(); 
+                    startTimedCountdown(); 
+                }, 50);
+            }, 1000);
+        }
+
+        function startTimedCountdown() {
+            const initialLayout = document.getElementById('initial-main-layout');
+            const teaserMessage = document.getElementById('teaser-message');
+            const btnContainer = document.getElementById('timed-trigger-container');
+            const btn = document.getElementById('memories-btn');
+
+            setTimeout(() => {
+                initialLayout.style.opacity = "0";
+                setTimeout(() => {
+                    teaserMessage.classList.remove('hidden');
+                    teaserMessage.classList.add('opacity-100');
+                }, 300);
+            }, 3200);
+
+            setTimeout(() => {
+                teaserMessage.classList.remove('opacity-100');
+                teaserMessage.classList.add('opacity-0');
+                setTimeout(() => {
+                    teaserMessage.classList.add('hidden');
+                    initialLayout.style.opacity = "1";
+                }, 300);
+            }, 5800);
+
+            setTimeout(() => {
+                btnContainer.style.pointerEvents = "auto";
+                btnContainer.classList.remove('opacity-0', 'translate-y-10');
+                btnContainer.classList.add('opacity-100', 'translate-y-0');
+                btn.classList.add('force-clickable');
+            }, 7000); 
+        }
+
+        function switchToNextScreen() {
+            const btn = document.getElementById('memories-btn');
+            if (btn.disabled) return; 
+            btn.disabled = true;
+            btn.innerHTML = "Opening memories... 🖤";
+
+            let vol = 1.0;
+            const audioInterval = setInterval(() => {
+                if (vol > 0.3) { vol -= 0.1; audio.volume = vol; } 
+                else { clearInterval(audioInterval); }
+            }, 100);
+
+            const screenA = document.getElementById('screen-initial');
+            const screenB = document.getElementById('screen-gallery');
+            screenA.classList.add('opacity-0', 'scale-95');
+            
+            setTimeout(() => {
+                screenA.classList.add('hidden');
+                screenB.classList.remove('hidden');
+                setTimeout(() => {
+                    screenB.classList.add('opacity-100');
+                    const audioRestore = setInterval(() => {
+                        if (audio.volume < 1.0) { audio.volume += 0.1; } 
+                        else { clearInterval(audioRestore); }
+                    }, 150);
+                }, 50);
+            }, 1200);
+        }
+
+        function triggerTrapPopup() {
+            const trapPopup = document.getElementById('popup-trap');
+            trapPopup.classList.remove('hidden');
+            setTimeout(() => { trapPopup.classList.add('opacity-100'); }, 50);
+        }
+
+        function trollNoButton() {
+            const noBtn = document.getElementById('no-btn');
+            const warning = document.getElementById('trap-warning');
+            const nextGalleryBtn = document.getElementById('gallery-next-btn');
+
+            nextGalleryBtn.disabled = true;
+            nextGalleryBtn.style.opacity = "0.4";
+            nextGalleryBtn.innerHTML = "Next Disabled 🔒";
+            warning.classList.remove('hidden');
+
+            const minLeft = 5;  const maxLeft = 70; 
+            const minTop = 10;  const maxTop = 75;  
+
+            const randomX = Math.floor(Math.random() * (maxLeft - minLeft + 1)) + minLeft;
+            const randomY = Math.floor(Math.random() * (maxTop - minTop + 1)) + minTop;
+            
+            noBtn.style.left = randomX + "%";
+            noBtn.style.top = randomY + "%";
+        }
+
+        function runTimelineCounter() {
+            counterInterval = setInterval(() => {
+                const now = new Date();
+                const diff = now - targetDate;
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / (1000));
+                const ms = Math.floor(diff % 1000);
+                document.getElementById('timeline-counter').innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s ${ms}ms`;
+            }, 33);
+        }
+
+        function goToIntermediateScreen() {
+            const trapPopup = document.getElementById('popup-trap');
+            const screenB = document.getElementById('screen-gallery');
+            const screenC = document.getElementById('screen-intermediate');
+
+            trapPopup.classList.remove('opacity-100');
+            trapPopup.classList.add('opacity-0');
+            screenB.classList.remove('opacity-100');
+            screenB.classList.add('opacity-0');
+
+            setTimeout(() => {
+                trapPopup.classList.add('hidden');
+                screenB.classList.add('hidden');
+                screenC.classList.remove('hidden');
+                setTimeout(() => {
+                    screenC.classList.add('opacity-100');
+                    runTimelineCounter(); 
+                    startCinematicFadeBlur(); 
+                }, 50);
+            }, 1000);
+        }
+
+        function startCinematicFadeBlur() {
+            const scrollBox = document.getElementById('scroll-box');
+            const textElement = document.getElementById('scrolling-text');
+            let currentScroll = 0;
+            let currentVolume = 1.0;
+            
+            cinematicInterval = setInterval(() => {
+                if (currentScroll < (textElement.scrollHeight - scrollBox.clientHeight)) {
+                    currentScroll += 0.4; 
+                    scrollBox.scrollTop = currentScroll;
+                }
+                if (currentVolume > 0.05) {
+                    currentVolume -= 0.0015;
+                    audio.volume = Math.max(0.05, currentVolume);
+                }
+                if (currentScroll > 50) {
+                    let blurFactor = Math.min((currentScroll - 50) / 45, 3.5); 
+                    textElement.style.filter = `blur(${blurFactor}px)`;
+                }
+                if (currentScroll >= (textElement.scrollHeight - scrollBox.clientHeight - 5)) {
+                    clearInterval(cinematicInterval);
+                }
+            }, 30);
+        }
+
+        function goToFinalScreen() {
+            clearInterval(counterInterval);
+            clearInterval(cinematicInterval);
+
+            const screenC = document.getElementById('screen-intermediate');
+            const screenD = document.getElementById('screen-final');
+
+            screenC.classList.remove('opacity-100');
+            screenC.classList.add('opacity-0');
+
+            setTimeout(() => {
+                screenC.classList.add('hidden');
+                screenD.classList.remove('hidden');
+                setTimeout(() => {
+                    screenD.classList.add('opacity-100');
+                    audio.volume = 1.0; 
+                    startTypewriterEffect(); 
+                }, 50);
+            }, 1000);
+        }
+
+        function startTypewriterEffect() {
+            const container = document.getElementById('typing-text');
+            const flowerPanel = document.getElementById('flower-panel');
+            let index = 0;
+            container.innerHTML = "";
+
+            typingInterval = setInterval(() => {
+                if (index < finalLetterText.length) {
+                    container.innerHTML += finalLetterText.charAt(index);
+                    index++;
+                } else {
+                    clearInterval(typingInterval);
+                    flowerPanel.classList.remove('opacity-0', 'translate-y-4');
+                    flowerPanel.classList.add('opacity-100', 'translate-y-0');
+                }
+            }, 65); 
+        }
+
+        function triggerFlowerEnding() {
+            const btn = document.getElementById('flower-btn');
+            const finalTag = document.getElementById('final-tagline');
+            const ambientPhotos = document.getElementById('ambient-photos-container');
+            
+            btn.disabled = true;
+            btn.innerHTML = "Rose Left... 🌹";
+            finalTag.classList.remove('opacity-0');
+            finalTag.classList.add('opacity-100');
+
+            ambientPhotos.classList.remove('hidden');
+            const polaroids = document.querySelectorAll('.floating-polaroid');
+            setTimeout(() => {
+                polaroids.forEach(p => p.classList.add('active'));
+            }, 100);
+
+            for (let i = 0; i < 40; i++) {
+                setTimeout(() => { createPetal(); }, i * 100);
+            }
+
+            // 4.5 Seconds baad triggers the Heartbeat Flash effect before full screen reveal
+            setTimeout(() => {
+                document.body.classList.add('heartbeat-flash');
+                setTimeout(() => {
+                    triggerPhotoClimax();
+                }, 600); // Trigger mid-flash
+            }, 4000);
+        }
+
+        function triggerPhotoClimax() {
+            const finalMainBlock = document.getElementById('final-main-block');
+            const goodbyeLayer = document.getElementById('climax-goodbye-layer');
+            const specialPhoto = document.getElementById('climax-special-photo');
+            const thankyouMsg = document.getElementById('thankyou-msg');
+            const ambientPhotos = document.getElementById('ambient-photos-container');
+
+            finalMainBlock.style.opacity = "0";
+            
+            setTimeout(() => {
+                finalMainBlock.classList.add('hidden');
+                goodbyeLayer.classList.remove('hidden');
+                
+                setTimeout(() => {
+                    goodbyeLayer.classList.add('opacity-100');
+                    
+                    // Hold full screen image layout for 4 seconds beautifully
+                    setTimeout(() => {
+                        
+                        // FADE OUT full screen photo and fade out background music completely
+                        specialPhoto.style.opacity = "0";
+                        ambientPhotos.style.opacity = "0"; // Smoothly clean up floating fragments
+                        ambientPhotos.style.transition = "opacity 2.5s ease";
+                        
+                        let vol = audio.volume;
+                        const musicFade = setInterval(() => {
+                            if (vol > 0.02) {
+                                vol -= 0.02;
+                                audio.volume = vol;
+                            } else {
+                                audio.pause();
+                                clearInterval(musicFade);
+                            }
+                        }, 75);
+
+                        // Complete photo dissolve sequence
+                        setTimeout(() => {
+                            specialPhoto.classList.add('hidden');
+                            thankyouMsg.classList.remove('hidden');
+                            setTimeout(() => {
+                                thankyouMsg.classList.add('opacity-100');
+                                startFinalThankYouTypewriter();
+                            }, 100);
+                        }, 2600);
+
+                    }, 4000);
+                }, 50);
+            }, 600);
+        }
+
+        function startFinalThankYouTypewriter() {
+            const container = document.getElementById('thankyou-msg');
+            const text = "Thank you for coming in my life... ✨ you can exit this website now, but I hope the memories stay with you forever. ❤️";
+            let idx = 0;
+            container.innerHTML = "";
+
+            const lastTypewriter = setInterval(() => {
+                if (idx < text.length) {
+                    container.innerHTML += text.charAt(idx);
+                    idx++;
+                } else {
+                    clearInterval(lastTypewriter);
+                }
+            }, 95);
+        }
+
+        function createPetal() {
+            const petal = document.createElement('div');
+            petal.className = 'petal';
+            petal.style.left = Math.random() * 100 + 'vw';
+            const size = Math.random() * 8 + 6 + 'px';
+            petal.style.width = size;
+            petal.style.height = size;
+            petal.style.setProperty('--fall-speed', Math.random() * 3 + 4 + 's');
+            document.body.appendChild(petal);
+            setTimeout(() => { petal.remove(); }, 7000);
+        }
+
+        function initSpecialEffects() {
+            for(let i=0; i<80; i++) {
+                let star = document.createElement('div');
+                star.className = 'star';
+                star.style.width = star.style.height = Math.random() * 3 + 'px';
+                star.style.left = Math.random() * 100 + 'vw';
+                star.style.top = Math.random() * 100 + 'vh';
+                star.style.setProperty('--duration', Math.random() * 3 + 1 + 's');
+                document.body.appendChild(star);
+            }
+
+            const canvas = document.getElementById('heartCanvas');
+            const ctx = canvas.getContext('2d');
+            let hearts = [];
+
+            function resize() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            window.addEventListener('resize', resize);
+            resize();
+
+            class Heart {
+                constructor() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = canvas.height + 20;
+                    this.size = Math.random() * 10 + 6;
+                    this.speedY = Math.random() * 1 + 0.5;
+                    this.opacity = Math.random() * 0.5 + 0.2;
+                    this.swing = Math.random() * 1 - 0.5;
+                }
+                update() {
+                    this.y -= this.speedY;
+                    this.x += this.swing;
+                    if (this.opacity > 0.005) this.opacity -= 0.001;
+                }
+                draw() {
+                    ctx.save();
+                    ctx.globalAlpha = this.opacity;
+                    ctx.fillStyle = '#f43f5e';
+                    ctx.beginPath();
+                    ctx.moveTo(this.x, this.y);
+                    ctx.bezierCurveTo(this.x - this.size/2, this.y - this.size/2, this.x - this.size, this.y + this.size/3, this.x, this.y + this.size);
+                    ctx.bezierCurveTo(this.x + this.size, this.y + this.size/3, this.x + this.size/2, this.y - this.size/2, this.x, this.y);
+                    ctx.fill();
+                    ctx.restore();
+                }
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                if (Math.random() < 0.03) hearts.push(new Heart());
+                hearts.forEach((heart, index) => {
+                    heart.update();
+                    heart.draw();
+                    if (heart.y < -20 || heart.opacity <= 0) hearts.splice(index, 1);
+                });
+                requestAnimationFrame(animate);
+            }
+            animate();
+        }
+    </script>
+</body>
+</html>
