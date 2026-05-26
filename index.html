@@ -128,7 +128,7 @@
 
     <audio id="bg-music" src="music/sanam-mere-mehboob-qayamat-hogi-128-ytshorts.savetube.me.mp3" loop></audio>
 
-    <canvas id="heartCanvas" class="absolute inset-0 pointer-events-none z-10"></canvas>
+    <canvas id="heartCanvas" class="fixed inset-0 pointer-events-none z-10"></canvas>
 
     <!-- Floating Background Polaroids Container (Hidden on Mobile for cleaner responsive performance) -->
     <div id="ambient-photos-container" class="absolute inset-0 pointer-events-none overflow-hidden hidden md:block">
@@ -146,7 +146,7 @@
     <!-- POP-UP 2: Emotional Warning -->
     <div id="popup-2" class="fixed inset-0 z-40 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-1000 overflow-hidden">
         <div class="absolute inset-0 z-[-1] opacity-40 pointer-events-none">
-            <iframe class="w-full h-full scale-150 object-cover" src="images\VID-20260512-WA0006.mp4" frameborder="0" allow="autoplay; encrypted-media"></iframe>
+            <iframe class="w-full h-full object-cover scale-110" src="images\VID-20260512-WA0006.mp4" frameborder="0" allow="autoplay; encrypted-media"></iframe>
         </div>
         <div class="bg-[#050508]/90 backdrop-blur-md border border-rose-500/20 p-6 md:p-8 rounded-2xl max-w-sm w-full text-center shadow-2xl mx-4">
             <p class="text-base md:text-lg italic text-rose-300 mb-6">"Every small moment with you is a core memory..."</p>
@@ -173,15 +173,17 @@
         </div>
     </div>
 
+    <!-- Global Full-Screen Responsive Video Container -->
+    <div class="fixed inset-0 z-[-1] pointer-events-none overflow-hidden bg-[#0b0c10]">
+        <!-- Dark Overlay Layer to Make Content Legible -->
+        <div class="absolute inset-0 bg-black/40 z-10"></div>
+        <iframe class="w-full h-full object-cover scale-105" src="images\VID-20260512-WA0006.mp4" frameborder="0" allow="autoplay; encrypted-media"></iframe>
+    </div>
 
     <main id="main-content" class="hidden opacity-0 transition-opacity duration-1000 min-h-screen flex flex-col items-center justify-center relative p-4 md:p-6 z-20">
-        
-        <div class="absolute inset-0 z-[-1] opacity-20 pointer-events-none overflow-hidden">
-            <iframe class="w-full h-full scale-135 object-cover" src="images\VID-20260512-WA0006.mp4" frameborder="0" allow="autoplay; encrypted-media"></iframe>
-        </div>
 
         <!-- SCREEN A: Hey Special Person -->
-        <div id="screen-initial" class="max-w-xl text-center space-y-6 md:space-y-8 transition-all duration-1000 flex flex-col items-center relative min-h-[480px] justify-center w-full px-2">
+        <div id="screen-initial" class="max-w-xl text-center space-y-5 md:space-y-8 transition-all duration-1000 flex flex-col items-center relative min-h-[460px] justify-center w-full px-2">
             
             <div id="teaser-message" class="absolute inset-0 flex items-center justify-center bg-[#0b0c10]/95 z-30 hidden opacity-0 transition-all duration-700 rounded-2xl">
                 <p class="text-sm md:text-lg font-mono text-rose-400 animate-pulse text-center px-4 tracking-wider">
@@ -189,17 +191,17 @@
                 </p>
             </div>
 
-            <div id="initial-main-layout" class="space-y-6 md:space-y-8 flex flex-col items-center transition-opacity duration-500 w-full">
+            <div id="initial-main-layout" class="space-y-5 md:space-y-7 flex flex-col items-center transition-opacity duration-500 w-full">
                 <h1 class="text-2xl md:text-4xl font-extrabold tracking-tight bg-gradient-to-r from-rose-400 via-indigo-300 to-cyan-400 bg-clip-text text-transparent px-2">
                     Hey Special Person...
                 </h1>
                 
-                <div class="inline-block bg-[#1f2833] p-3 md:p-4 rounded-xl shadow-2xl transform -rotate-1 border border-white/10 max-w-[85%] sm:max-w-xs">
+                <div class="inline-block bg-[#1f2833]/90 backdrop-blur-sm p-3 md:p-4 rounded-xl shadow-2xl transform -rotate-1 border border-white/10 max-w-[85%] sm:max-w-xs">
                     <img src="images\IMG_20260526_225343.jpg" alt="First Memory" class="rounded shadow-inner max-h-52 md:max-h-64 w-full object-cover">
                     <p class="mt-2.5 font-mono text-[11px] text-gray-400 text-left">📍 Where it all started...</p>
                 </div>
 
-                <p class="text-sm md:text-base leading-relaxed text-gray-300 font-light max-w-md mx-auto italic px-2">
+                <p class="text-xs md:text-sm lg:text-base leading-relaxed text-gray-200 font-medium max-w-md mx-auto italic px-4 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
                     "I still remember this exact day. Everything felt so perfect, yet so fleeting... Kuch baatein adhuri hi achhi lagti hain." 💔
                 </p>
             </div>
@@ -211,27 +213,26 @@
             </div>
         </div>
 
-
         <!-- SCREEN B: Gallery Grid -->
         <div id="screen-gallery" class="hidden opacity-0 max-w-4xl w-full text-center space-y-8 md:space-y-10 transition-all duration-1000 py-6 flex flex-col items-center px-2">
             <h2 class="text-xl md:text-2xl font-light tracking-widest text-rose-400 uppercase">Unforgotten Chapters</h2>
             
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 w-full max-w-md sm:max-w-none">
-                <div class="grid-photo bg-[#1f2833] p-3 rounded-lg shadow-xl border border-white/5 sm:transform sm:rotate-1" style="--delay: 0.2s">
+                <div class="grid-photo bg-[#1f2833]/90 backdrop-blur-sm p-3 rounded-lg shadow-xl border border-white/5 sm:transform sm:rotate-1" style="--delay: 0.2s">
                     <img src="images\pic2 (6).jpg" class="rounded w-full h-44 md:h-48 object-cover">
                     <p class="mt-2 text-[11px] font-mono text-gray-400">The way you smile ☀️</p>
                 </div>
-                <div class="grid-photo bg-[#1f2833] p-3 rounded-lg shadow-xl border border-white/5 sm:transform sm:-rotate-1" style="--delay: 0.5s">
+                <div class="grid-photo bg-[#1f2833]/90 backdrop-blur-sm p-3 rounded-lg shadow-xl border border-white/5 sm:transform sm:-rotate-1" style="--delay: 0.5s">
                     <img src="images\pic2 (7).jpg" class="rounded w-full h-44 md:h-48 object-cover">
                     <p class="mt-2 text-[11px] font-mono text-gray-400">When the sky matched your mood 🌅</p>
                 </div>
-                <div class="grid-photo bg-[#1f2833] p-3 rounded-lg shadow-xl border border-white/5 sm:transform sm:rotate-1" style="--delay: 0.8s">
+                <div class="grid-photo bg-[#1f2833]/90 backdrop-blur-sm p-3 rounded-lg shadow-xl border border-white/5 sm:transform sm:rotate-1" style="--delay: 0.8s">
                     <img src="images\pic1.jpg" class="rounded w-full h-44 md:h-48 object-cover">
                     <p class="mt-2 text-[11px] font-mono text-gray-400">The silhouette of your smile 🌙</p>
                 </div>
             </div>
 
-            <p class="text-xs md:text-sm font-light text-gray-400 max-w-xl mx-auto pt-2 leading-relaxed px-4">
+            <p class="text-xs md:text-sm font-light text-gray-300 max-w-xl mx-auto pt-2 leading-relaxed px-4 drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]">
                 Ye saari photos mere paas sirf images nahi hain... ye tumhari sabse payri yaadein hain !
             </p>
 
@@ -241,7 +242,6 @@
                 </button>
             </div>
         </div>
-
 
         <!-- SCREEN C: Timer Counter & Dynamic Scroller -->
         <div id="screen-intermediate" class="hidden opacity-0 max-w-xl w-full text-center space-y-6 transition-all duration-1000 py-4 flex flex-col items-center px-2">
@@ -277,7 +277,7 @@
                     <div class="pt-2">
                         <h4 class="text-[10px] font-mono text-neutral-500 mb-1.5">● The Bitter Truth</h4>
                         <p class="text-xs leading-relaxed text-neutral-400 font-light">
-                            Ab shayad sound dheere dheere madham ho rha hai... bilkul hamari kahani ki tarah. Aur ye text jo aap padh rahe ho, dhundla ho raha hai na? Shayad ye screen ka fault nahi... shayad kuch yaadein aankhon me paani ban kar thahar jaati hain. 🫠💔
+                            Ab shayad sound dheere dideere madham ho rha hai... bilkul hamari kahani ki tarah. Aur ye text jo aap padh rahe ho, dhundla ho raha hai na? Shayad ye screen ka fault nahi... shayad kuch yaadein aankhon me paani ban kar thahar jaati hain. 🫠💔
                         </p>
                     </div>
                 </div>
@@ -289,7 +289,6 @@
                 </button>
             </div>
         </div>
-
 
         <!-- SCREEN D: THE GRAND CLIMAX -->
         <div id="screen-final" class="max-w-xl w-full text-center space-y-6 md:space-y-8 transition-all duration-1000 py-6 flex flex-col items-center hidden opacity-0 px-2">
@@ -336,7 +335,6 @@
         let cinematicInterval;
         let typingInterval;
 
-        // Upgraded Autoplay Handshake Engine
         window.onload = function() {
             const countdownNumber = document.getElementById('countdown-number');
             const clickPrompt = document.getElementById('click-prompt');
@@ -350,11 +348,9 @@
                     clearInterval(timer);
                     countdownNumber.innerText = "✨";
                     
-                    // Show click handler instantly to sync up music with user gesture
                     setTimeout(() => {
                         countdownNumber.classList.add('hidden');
                         clickPrompt.classList.remove('hidden');
-                        // Capture any global click on viewport to trigger audio safely
                         document.body.classList.add('cursor-pointer');
                         document.body.addEventListener('click', startExperienceWithMusic, { once: true });
                     }, 500);
@@ -366,8 +362,7 @@
         const finalLetterText = "Agar aap yahan tak aa gaye ho, toh bas itna jaan lo... Ki waqt badal sakta hai, log badal sakte hain, par jo jagah aapki mere dil me hai na, wo koi aur nahi le payega. You will always be my favorite 'what if'. 🫠❤️";
 
         function startExperienceWithMusic() {
-            // Audio starts exactly at user interaction right after counter finish
-            audio.play().catch(e => console.log("Audio play blocked by ecosystem:", e));
+            audio.play().catch(e => console.log("Audio play blocked:", e));
             
             const timerOverlay = document.getElementById('cinematic-timer');
             timerOverlay.classList.add('opacity-0');
@@ -463,14 +458,11 @@
             const trapPopup = document.getElementById('popup-trap');
             trapPopup.classList.remove('hidden');
             setTimeout(() => { trapPopup.classList.add('opacity-100'); }, 50);
-            
-            // Layout adjustments for mobile when trap triggers
             resetNoButtonResponsive();
         }
 
         function resetNoButtonResponsive() {
             const noBtn = document.getElementById('no-btn');
-            const container = document.getElementById('trap-actions-container');
             if (window.innerWidth < 640) {
                 noBtn.style.left = "0px";
                 noBtn.style.bottom = "0px";
@@ -485,7 +477,7 @@
         }
 
         function trollNoButton(e) {
-            if (e) e.preventDefault(); // Stop mobile double tap issues
+            if (e) e.preventDefault(); 
 
             const noBtn = document.getElementById('no-btn');
             const warning = document.getElementById('trap-warning');
@@ -499,7 +491,6 @@
             const isMobile = window.innerWidth < 640;
             
             if (isMobile) {
-                // Run random bounds inside card safely on mobile devices
                 const minLeft = 5;  const maxLeft = 65;
                 const minTop = 5;   const maxTop = 45;
                 const randomX = Math.floor(Math.random() * (maxLeft - minLeft + 1)) + minLeft;
@@ -510,7 +501,6 @@
                 noBtn.style.left = randomX + "%";
                 noBtn.style.top = randomY + "px";
             } else {
-                // Desktop absolute logic bounds
                 const minLeft = 5;  const maxLeft = 70; 
                 const minTop = 5;   const maxTop = 45;  
                 const randomX = Math.floor(Math.random() * (maxLeft - minLeft + 1)) + minLeft;
@@ -630,7 +620,6 @@
             finalTag.classList.remove('opacity-0');
             finalTag.classList.add('opacity-100');
 
-            // Only trigger ambient floats if desktop container is active
             if (window.innerWidth >= 768) {
                 ambientPhotos.classList.remove('hidden');
                 const polaroids = document.querySelectorAll('.floating-polaroid');
@@ -644,7 +633,6 @@
                 setTimeout(() => { createPetal(); }, i * 110);
             }
 
-            // 4.5 Seconds baad triggers the Heartbeat Flash effect before full screen reveal
             setTimeout(() => {
                 document.body.classList.add('heartbeat-flash');
                 setTimeout(() => {
@@ -669,13 +657,9 @@
                 setTimeout(() => {
                     goodbyeLayer.classList.add('opacity-100');
                     
-                    // Hold full screen image layout for 4 seconds beautifully
                     setTimeout(() => {
-                        
-                        // FADE OUT full screen photo and fade out background music completely
                         specialPhoto.style.opacity = "0";
-                        ambientPhotos.style.opacity = "0"; 
-                        ambientPhotos.style.transition = "opacity 2.5s ease";
+                        if (ambientPhotos) ambientPhotos.style.opacity = "0"; 
                         
                         let vol = audio.volume;
                         const musicFade = setInterval(() => {
@@ -688,7 +672,6 @@
                             }
                         }, 75);
 
-                        // Complete photo dissolve sequence
                         setTimeout(() => {
                             specialPhoto.classList.add('hidden');
                             thankyouMsg.classList.remove('hidden');
