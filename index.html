@@ -34,7 +34,8 @@
         }
 
         #no-btn {
-            transition: all 0.15s ease-out;
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            touch-action: none;
         }
 
         .custom-scroll::-webkit-scrollbar {
@@ -67,7 +68,7 @@
             100% { transform: translateY(105vh) rotate(360deg); opacity: 0; }
         }
 
-        /* Floating Polaroid Elements Animation (Option 2) */
+        /* Floating Polaroid Elements Animation (Desktop Only) */
         .floating-polaroid {
             position: absolute;
             background: #1f2833;
@@ -112,14 +113,14 @@
 <body class="bg-[#0b0c10] text-gray-200 font-sans overflow-x-hidden relative min-h-screen select-none">
 
     <!-- Cinematic Pre-loader Timer -->
-    <div id="cinematic-timer" class="fixed inset-0 bg-[#0b0c10] z-[100] flex flex-col items-center justify-center transition-opacity duration-1000">
-        <div class="text-center space-y-4">
-            <p class="text-xs font-mono tracking-widest text-gray-500 uppercase">Initializing Experience</p>
+    <div id="cinematic-timer" class="fixed inset-0 bg-[#0b0c10] z-[100] flex flex-col items-center justify-center transition-opacity duration-1000 p-4">
+        <div class="text-center space-y-4 w-full max-w-sm">
+            <p class="text-[10px] md:text-xs font-mono tracking-widest text-gray-500 uppercase">Initializing Experience</p>
             <div id="countdown-number" class="text-6xl md:text-8xl font-extrabold text-transparent bg-clip-text bg-gradient-to-b from-[#45f3ff] to-indigo-500">
                 3
             </div>
             <!-- Click Overlay Trigger for Music Autoplay Rule Fix -->
-            <div id="click-prompt" class="text-sm font-light text-rose-400 tracking-wider hidden animate-pulse mt-4 cursor-pointer border border-rose-500/20 px-4 py-2 rounded-full bg-rose-500/5">
+            <div id="click-prompt" class="text-xs md:text-sm font-light text-rose-400 tracking-wider hidden animate-pulse mt-4 cursor-pointer border border-rose-500/20 px-4 py-2 rounded-full bg-rose-500/5">
                 Click anywhere to enter into memories... 🎧
             </div>
         </div>
@@ -129,8 +130,8 @@
 
     <canvas id="heartCanvas" class="absolute inset-0 pointer-events-none z-10"></canvas>
 
-    <!-- Floating Background Polaroids Container -->
-    <div id="ambient-photos-container" class="absolute inset-0 pointer-events-none overflow-hidden hidden">
+    <!-- Floating Background Polaroids Container (Hidden on Mobile for cleaner responsive performance) -->
+    <div id="ambient-photos-container" class="absolute inset-0 pointer-events-none overflow-hidden hidden md:block">
         <div class="floating-polaroid" style="top: 15%; left: 8%; --custom-rotate: rotate(-8deg);">
             <img src="images\pic2 (6).jpg">
         </div>
@@ -147,9 +148,9 @@
         <div class="absolute inset-0 z-[-1] opacity-40 pointer-events-none">
             <iframe class="w-full h-full scale-150 object-cover" src="images\VID-20260512-WA0006.mp4" frameborder="0" allow="autoplay; encrypted-media"></iframe>
         </div>
-        <div class="bg-[#050508]/90 backdrop-blur-md border border-rose-500/20 p-8 rounded-2xl max-w-sm w-full text-center shadow-2xl">
-            <p class="text-lg italic text-rose-300 mb-6">"Every small moment with you is a core memory..."</p>
-            <button onclick="revealMainSite()" class="border border-rose-500/50 hover:bg-rose-500/10 text-rose-400 font-medium px-6 py-2.5 rounded-xl cursor-pointer transition-all force-clickable">
+        <div class="bg-[#050508]/90 backdrop-blur-md border border-rose-500/20 p-6 md:p-8 rounded-2xl max-w-sm w-full text-center shadow-2xl mx-4">
+            <p class="text-base md:text-lg italic text-rose-300 mb-6">"Every small moment with you is a core memory..."</p>
+            <button onclick="revealMainSite()" class="w-full sm:w-auto border border-rose-500/50 hover:bg-rose-500/10 text-rose-400 font-medium px-6 py-2.5 rounded-xl cursor-pointer transition-all force-clickable text-sm">
                 Promise I won't cry 🫠
             </button>
         </div>
@@ -157,15 +158,15 @@
 
     <!-- POP-UP 3: Trap Card -->
     <div id="popup-trap" class="fixed inset-0 bg-[#050508]/95 z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-1000">
-        <div id="trap-card" class="bg-[#1f2833]/90 backdrop-blur-md border border-purple-500/30 p-8 rounded-2xl max-w-sm w-full text-center shadow-2xl relative min-h-[260px] overflow-hidden flex flex-col justify-center items-center">
-            <h3 class="text-lg font-medium text-purple-300 mb-2" id="trap-title">Are you enjoying this website? 🫠</h3>
-            <p class="text-xs text-rose-400 mb-6 hidden" id="trap-warning">Galat jawab! "No" bolne ka option nahi hai yahan. 🤫</p>
+        <div id="trap-card" class="bg-[#1f2833]/90 backdrop-blur-md border border-purple-500/30 p-6 md:p-8 rounded-2xl max-w-sm w-full text-center shadow-2xl relative min-h-[280px] overflow-hidden flex flex-col justify-center items-center mx-4">
+            <h3 class="text-base md:text-lg font-medium text-purple-300 mb-2" id="trap-title">Are you enjoying this website? 🫠</h3>
+            <p class="text-[11px] text-rose-400 mb-6 hidden px-2" id="trap-warning">Galat jawab! "No" bolne ka option nahi hai yahan. 🤫</p>
             
-            <div class="w-full flex flex-col sm:flex-row justify-center items-center gap-4 mt-2 h-16 relative">
-                <button onclick="goToIntermediateScreen()" class="bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-medium px-6 py-2 rounded-xl force-clickable shadow-lg shadow-emerald-600/20 transition-all z-20">
+            <div id="trap-actions-container" class="w-full flex flex-col sm:flex-row justify-center items-center gap-3 mt-2 h-24 sm:h-16 relative">
+                <button onclick="goToIntermediateScreen()" class="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-500 text-white text-xs md:text-sm font-medium px-6 py-2.5 rounded-xl force-clickable shadow-lg shadow-emerald-600/20 transition-all z-20">
                     Yes, absolutely ❤️
                 </button>
-                <button id="no-btn" onmouseover="trollNoButton()" onclick="trollNoButton()" class="bg-rose-700 text-white text-sm font-medium px-6 py-2 rounded-xl absolute z-30 transition-all duration-150 force-clickable" style="left: 60%; top: 16px;">
+                <button id="no-btn" onmouseover="trollNoButton()" onclick="trollNoButton()" ontouchstart="trollNoButton(event)" class="w-full sm:w-auto bg-rose-700 text-white text-xs md:text-sm font-medium px-6 py-2.5 rounded-xl absolute z-30 force-clickable" style="left: 0%; bottom: 0px;">
                     No 😤
                 </button>
             </div>
@@ -173,38 +174,38 @@
     </div>
 
 
-    <main id="main-content" class="hidden opacity-0 transition-opacity duration-1000 min-h-screen flex flex-col items-center justify-center relative p-6 z-20">
+    <main id="main-content" class="hidden opacity-0 transition-opacity duration-1000 min-h-screen flex flex-col items-center justify-center relative p-4 md:p-6 z-20">
         
         <div class="absolute inset-0 z-[-1] opacity-20 pointer-events-none overflow-hidden">
             <iframe class="w-full h-full scale-135 object-cover" src="images\VID-20260512-WA0006.mp4" frameborder="0" allow="autoplay; encrypted-media"></iframe>
         </div>
 
         <!-- SCREEN A: Hey Special Person -->
-        <div id="screen-initial" class="max-w-2xl text-center space-y-8 transition-all duration-1000 flex flex-col items-center relative min-h-[450px] justify-center">
+        <div id="screen-initial" class="max-w-xl text-center space-y-6 md:space-y-8 transition-all duration-1000 flex flex-col items-center relative min-h-[480px] justify-center w-full px-2">
             
-            <div id="teaser-message" class="absolute inset-0 flex items-center justify-center bg-[#0b0c10]/95 z-30 hidden opacity-0 transition-all duration-700">
-                <p class="text-base md:text-lg font-mono text-rose-400 animate-pulse text-center px-4 tracking-wider">
-                    Don't quit yet... <br><span class="text-xs text-gray-400">Something beautiful is unfolding for you. 🤫</span>
+            <div id="teaser-message" class="absolute inset-0 flex items-center justify-center bg-[#0b0c10]/95 z-30 hidden opacity-0 transition-all duration-700 rounded-2xl">
+                <p class="text-sm md:text-lg font-mono text-rose-400 animate-pulse text-center px-4 tracking-wider">
+                    Don't quit yet... <br><span class="text-[11px] md:text-xs text-gray-400">Something beautiful is unfolding for you. 🤫</span>
                 </p>
             </div>
 
-            <div id="initial-main-layout" class="space-y-8 flex flex-col items-center transition-opacity duration-500">
-                <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight bg-gradient-to-r from-rose-400 via-indigo-300 to-cyan-400 bg-clip-text text-transparent">
+            <div id="initial-main-layout" class="space-y-6 md:space-y-8 flex flex-col items-center transition-opacity duration-500 w-full">
+                <h1 class="text-2xl md:text-4xl font-extrabold tracking-tight bg-gradient-to-r from-rose-400 via-indigo-300 to-cyan-400 bg-clip-text text-transparent px-2">
                     Hey Special Person...
                 </h1>
                 
-                <div class="inline-block bg-[#1f2833] p-4 rounded-xl shadow-2xl transform -rotate-2 border border-white/10">
-                    <img src="images\IMG_20260526_225343.jpg" alt="First Memory" class="rounded shadow-inner max-h-64 object-cover">
-                    <p class="mt-3 font-mono text-xs text-gray-400 text-left">📍 Where it all started...</p>
+                <div class="inline-block bg-[#1f2833] p-3 md:p-4 rounded-xl shadow-2xl transform -rotate-1 border border-white/10 max-w-[85%] sm:max-w-xs">
+                    <img src="images\IMG_20260526_225343.jpg" alt="First Memory" class="rounded shadow-inner max-h-52 md:max-h-64 w-full object-cover">
+                    <p class="mt-2.5 font-mono text-[11px] text-gray-400 text-left">📍 Where it all started...</p>
                 </div>
 
-                <p class="text-base leading-relaxed text-gray-300 font-light max-w-xl mx-auto italic">
+                <p class="text-sm md:text-base leading-relaxed text-gray-300 font-light max-w-md mx-auto italic px-2">
                     "I still remember this exact day. Everything felt so perfect, yet so fleeting... Kuch baatein adhuri hi achhi lagti hain." 💔
                 </p>
             </div>
 
-            <div id="timed-trigger-container" class="opacity-0 translate-y-10 transition-all duration-1000 mt-6 z-10" style="pointer-events: none;">
-                <button id="memories-btn" onclick="switchToNextScreen()" class="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-mono text-xs tracking-wider px-6 py-3 rounded-full shadow-lg shadow-indigo-500/30 active:scale-95 transition-transform duration-300">
+            <div id="timed-trigger-container" class="opacity-0 translate-y-6 transition-all duration-1000 mt-4 z-10 w-full" style="pointer-events: none;">
+                <button id="memories-btn" onclick="switchToNextScreen()" class="w-full sm:w-auto bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-mono text-[11px] md:text-xs tracking-wider px-5 py-3.5 rounded-full shadow-lg shadow-indigo-500/30 active:scale-95 transition-transform duration-300">
                     👉 Click here to unfold baki ki yaadein...
                 </button>
             </div>
@@ -212,30 +213,30 @@
 
 
         <!-- SCREEN B: Gallery Grid -->
-        <div id="screen-gallery" class="hidden opacity-0 max-w-4xl w-full text-center space-y-10 transition-all duration-1000 py-10 flex flex-col items-center">
-            <h2 class="text-2xl font-light tracking-widest text-rose-400 uppercase"> Unforgotten Chapters</h2>
+        <div id="screen-gallery" class="hidden opacity-0 max-w-4xl w-full text-center space-y-8 md:space-y-10 transition-all duration-1000 py-6 flex flex-col items-center px-2">
+            <h2 class="text-xl md:text-2xl font-light tracking-widest text-rose-400 uppercase">Unforgotten Chapters</h2>
             
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 w-full">
-                <div class="grid-photo bg-[#1f2833] p-3 rounded-lg shadow-xl border border-white/5 transform rotate-1" style="--delay: 0.2s">
-                    <img src="images\pic2 (6).jpg" class="rounded w-full h-48 object-cover">
-                    <p class="mt-2 text-xs font-mono text-gray-400">The way you smile ☀️</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 w-full max-w-md sm:max-w-none">
+                <div class="grid-photo bg-[#1f2833] p-3 rounded-lg shadow-xl border border-white/5 sm:transform sm:rotate-1" style="--delay: 0.2s">
+                    <img src="images\pic2 (6).jpg" class="rounded w-full h-44 md:h-48 object-cover">
+                    <p class="mt-2 text-[11px] font-mono text-gray-400">The way you smile ☀️</p>
                 </div>
-                <div class="grid-photo bg-[#1f2833] p-3 rounded-lg shadow-xl border border-white/5 transform -rotate-2" style="--delay: 0.5s">
-                    <img src="images\pic2 (7).jpg" class="rounded w-full h-48 object-cover">
-                    <p class="mt-2 text-xs font-mono text-gray-400">When the sky matched your mood 🌅</p>
+                <div class="grid-photo bg-[#1f2833] p-3 rounded-lg shadow-xl border border-white/5 sm:transform sm:-rotate-1" style="--delay: 0.5s">
+                    <img src="images\pic2 (7).jpg" class="rounded w-full h-44 md:h-48 object-cover">
+                    <p class="mt-2 text-[11px] font-mono text-gray-400">When the sky matched your mood 🌅</p>
                 </div>
-                <div class="grid-photo bg-[#1f2833] p-3 rounded-lg shadow-xl border border-white/5 transform rotate-3" style="--delay: 0.8s">
-                    <img src="images\pic1.jpg" class="rounded w-full h-48 object-cover">
-                    <p class="mt-2 text-xs font-mono text-gray-400">The silhouette of your smile 🌙</p>
+                <div class="grid-photo bg-[#1f2833] p-3 rounded-lg shadow-xl border border-white/5 sm:transform sm:rotate-1" style="--delay: 0.8s">
+                    <img src="images\pic1.jpg" class="rounded w-full h-44 md:h-48 object-cover">
+                    <p class="mt-2 text-[11px] font-mono text-gray-400">The silhouette of your smile 🌙</p>
                 </div>
             </div>
 
-            <p class="text-sm font-light text-gray-400 max-w-xl mx-auto pt-4 leading-relaxed">
+            <p class="text-xs md:text-sm font-light text-gray-400 max-w-xl mx-auto pt-2 leading-relaxed px-4">
                 Ye saari photos mere paas sirf images nahi hain... ye tumhari sabse payri yaadein hain !
             </p>
 
-            <div class="pt-6">
-                <button id="gallery-next-btn" onclick="triggerTrapPopup()" class="bg-gradient-to-r from-rose-600 to-purple-600 hover:from-rose-500 hover:to-purple-500 text-white font-mono text-xs tracking-widest px-8 py-3.5 rounded-xl shadow-xl shadow-purple-900/40 transition-all duration-300 hover:scale-105 force-clickable">
+            <div class="pt-4 w-full">
+                <button id="gallery-next-btn" onclick="triggerTrapPopup()" class="w-full sm:w-auto bg-gradient-to-r from-rose-600 to-purple-600 hover:from-rose-500 hover:to-purple-500 text-white font-mono text-[11px] md:text-xs tracking-widest px-6 py-3.5 rounded-xl shadow-xl shadow-purple-900/40 transition-all duration-300 hover:scale-105 force-clickable">
                     Go Deeper into Memories... ⏩
                 </button>
             </div>
@@ -243,47 +244,47 @@
 
 
         <!-- SCREEN C: Timer Counter & Dynamic Scroller -->
-        <div id="screen-intermediate" class="hidden opacity-0 max-w-2xl w-full text-center space-y-6 transition-all duration-1000 py-6 flex flex-col items-center">
-            <div class="bg-neutral-950/60 border border-rose-500/10 rounded-2xl px-6 py-4 max-w-md w-full shadow-inner">
-                <p class="text-[10px] font-mono tracking-widest text-gray-500 uppercase mb-2">Time passed since our first photo...</p>
-                <div id="timeline-counter" class="font-mono text-lg md:text-xl font-bold bg-gradient-to-r from-rose-400 to-purple-400 bg-clip-text text-transparent">
+        <div id="screen-intermediate" class="hidden opacity-0 max-w-xl w-full text-center space-y-6 transition-all duration-1000 py-4 flex flex-col items-center px-2">
+            <div class="bg-neutral-950/60 border border-rose-500/10 rounded-2xl px-4 py-3.5 w-full shadow-inner">
+                <p class="text-[9px] md:text-[10px] font-mono tracking-widest text-gray-500 uppercase mb-1">Time passed since our first photo...</p>
+                <div id="timeline-counter" class="font-mono text-base md:text-xl font-bold bg-gradient-to-r from-rose-400 to-purple-400 bg-clip-text text-transparent tracking-tight">
                     00d 00h 00m 00s 000ms
                 </div>
             </div>
 
-            <div id="scroll-box" class="bg-[#12121c]/60 border border-white/5 p-6 md:p-8 rounded-2xl max-w-xl w-full h-[320px] overflow-y-auto custom-scroll relative">
-                <div id="scrolling-text" class="scrolling-content space-y-8 text-left pb-20">
+            <div id="scroll-box" class="bg-[#12121c]/60 border border-white/5 p-5 md:p-8 rounded-2xl w-full h-[45vh] sm:h-[320px] overflow-y-auto custom-scroll relative">
+                <div id="scrolling-text" class="scrolling-content space-y-6 md:space-y-8 text-left pb-16">
                     <div>
-                        <h4 class="text-xs font-mono text-rose-400 mb-2">● Fragment of memory</h4>
-                        <p class="text-sm md:text-base leading-relaxed text-gray-300 font-light italic">
+                        <h4 class="text-[10px] font-mono text-rose-400 mb-1.5">● Fragment of memory</h4>
+                        <p class="text-xs md:text-base leading-relaxed text-gray-300 font-light italic">
                             Waqt bohot tezi se aage nikal gaya, par mera ek hissa aaj bhi wahi thehra hua hai. Log kehte hain move on kar lo, par unhe kaise samjhaun ki kuch yaadein mitaane ke liye nahi, poori zindagi sambhalne ke liye hoti hain.
                         </p>
                     </div>
 
-                    <div class="space-y-4 border-l border-purple-500/20 pl-4">
-                        <h4 class="text-xs font-mono text-purple-400">● The Unanswered Questions...</h4>
-                        <p class="text-sm italic text-gray-300 font-light">
+                    <div class="space-y-4 border-l border-purple-500/20 pl-3">
+                        <h4 class="text-[10px] font-mono text-purple-400">● The Unanswered Questions...</h4>
+                        <p class="text-xs italic text-gray-300 font-light leading-relaxed">
                             "Kya tum bhi kabhi un purane gaano ko sunkar thoda ruk jaate ho, ya unhe skip kar dete ho? jo maine bheje the ?"
                         </p>
-                        <p class="text-sm italic text-gray-300 font-light">
+                        <p class="text-xs italic text-gray-300 font-light leading-relaxed">
                             "kya tumhe meri jarasi bhi kami mehsoos hoti hai? ya tumne mujhe puri tarah se bhula diya hai?"
                         </p>
-                        <p class="text-sm italic text-gray-300 font-light">
+                        <p class="text-xs italic text-gray-300 font-light leading-relaxed">
                             "Agar tumhe meri kami nahi mehsoos hoti, toh kya tumne apne dil se meri jagah hata di hai? ya tumne us jagah ko kisi aur se bhar diya hai?"
                         </p>
                     </div>
 
-                    <div class="pt-4">
-                        <h4 class="text-xs font-mono text-neutral-500 mb-2">● The Bitter Truth</h4>
-                        <p class="text-sm leading-relaxed text-neutral-400 font-light">
+                    <div class="pt-2">
+                        <h4 class="text-[10px] font-mono text-neutral-500 mb-1.5">● The Bitter Truth</h4>
+                        <p class="text-xs leading-relaxed text-neutral-400 font-light">
                             Ab shayad sound dheere dheere madham ho rha hai... bilkul hamari kahani ki tarah. Aur ye text jo aap padh rahe ho, dhundla ho raha hai na? Shayad ye screen ka fault nahi... shayad kuch yaadein aankhon me paani ban kar thahar jaati hain. 🫠💔
                         </p>
                     </div>
                 </div>
             </div>
 
-            <div class="pt-4">
-                <button onclick="goToFinalScreen()" class="border-b border-rose-500/40 hover:border-rose-500 text-rose-400 font-mono text-xs tracking-widest pb-1 cursor-pointer transition-all force-clickable">
+            <div class="pt-2 w-full">
+                <button onclick="goToFinalScreen()" class="border-b border-rose-500/40 hover:border-rose-500 text-rose-400 font-mono text-[11px] tracking-widest pb-1 cursor-pointer transition-all force-clickable">
                     [ Open the final letter... 🖤 ]
                 </button>
             </div>
@@ -291,21 +292,21 @@
 
 
         <!-- SCREEN D: THE GRAND CLIMAX -->
-        <div id="screen-final" class="max-w-2xl w-full text-center space-y-8 transition-all duration-1000 py-12 flex flex-col items-center hidden opacity-0">
+        <div id="screen-final" class="max-w-xl w-full text-center space-y-6 md:space-y-8 transition-all duration-1000 py-6 flex flex-col items-center hidden opacity-0 px-2">
             
-            <div id="final-main-block" class="space-y-8 flex flex-col items-center w-full transition-opacity duration-1000">
-                <h2 class="text-3xl font-extralight tracking-widest text-neutral-100">The Last Chapter... 🖤</h2>
-                <div class="w-16 h-[1px] bg-rose-500/50 my-2"></div>
+            <div id="final-main-block" class="space-y-6 md:space-y-8 flex flex-col items-center w-full transition-opacity duration-1000">
+                <h2 class="text-xl md:text-3xl font-extralight tracking-widest text-neutral-100">The Last Chapter... 🖤</h2>
+                <div class="w-12 md:w-16 h-[1px] bg-rose-500/50 my-1"></div>
                 
-                <div class="min-h-[140px] flex items-center justify-center">
-                    <p id="typing-text" class="text-base leading-relaxed text-neutral-300 font-light max-w-xl italic text-center"></p>
+                <div class="min-h-[160px] md:min-h-[140px] flex items-center justify-center px-2">
+                    <p id="typing-text" class="text-xs md:text-base leading-relaxed text-neutral-300 font-light italic text-center"></p>
                 </div>
 
-                <div id="flower-panel" class="pt-8 transition-all duration-700 opacity-0 transform translate-y-4">
-                    <button id="flower-btn" onclick="triggerFlowerEnding()" class="border border-rose-500/40 bg-rose-500/5 hover:bg-rose-500/20 text-rose-300 font-mono text-xs tracking-widest px-6 py-3 rounded-xl transition-all shadow-lg force-clickable">
+                <div id="flower-panel" class="pt-4 transition-all duration-700 opacity-0 transform translate-y-4 w-full">
+                    <button id="flower-btn" onclick="triggerFlowerEnding()" class="w-full sm:w-auto border border-rose-500/40 bg-rose-500/5 hover:bg-rose-500/20 text-rose-300 font-mono text-[11px] tracking-widest px-5 py-3.5 rounded-xl transition-all shadow-lg force-clickable">
                         Leave a red rose for memories 🌹
                     </button>
-                    <div id="final-tagline" class="text-lg text-rose-600/80 pt-6 font-light tracking-widest opacity-0 transition-opacity duration-1000 mt-2">
+                    <div id="final-tagline" class="text-base md:text-lg text-rose-600/80 pt-4 font-light tracking-widest opacity-0 transition-opacity duration-1000 mt-1">
                         Always & Forever ❤️
                     </div>
                 </div>
@@ -318,11 +319,11 @@
                 <div id="climax-special-photo" class="absolute inset-0 w-full h-full flex items-center justify-center transition-opacity duration-[2500ms] ease-in-out">
                     <div class="absolute inset-0 bg-gradient-to-t from-[#050508] via-transparent to-[#050508] z-10"></div>
                     <img src="images\IMG_20260526_225343.jpg" class="w-full h-full object-cover opacity-80 filter brightness-90">
-                    <p class="absolute bottom-12 left-1/2 transform -translate-x-1/2 z-20 font-mono text-xs text-gray-400 tracking-widest bg-black/40 backdrop-blur-sm px-4 py-2 rounded-full border border-white/5">Hamesha ke liye mere dil me... 🔒</p>
+                    <p class="absolute bottom-10 md:bottom-12 left-1/2 transform -translate-x-1/2 z-20 font-mono text-[10px] md:text-xs text-gray-400 tracking-widest bg-black/50 backdrop-blur-sm px-4 py-2 rounded-full border border-white/5 whitespace-nowrap">Hamesha ke liye mere dil me... 🔒</p>
                 </div>
 
                 <!-- Last Thank You Text Container -->
-                <p id="thankyou-msg" class="text-xl md:text-2xl font-light font-serif text-rose-100 tracking-widest text-center max-w-lg hidden opacity-0 transition-opacity duration-[1500ms] italic px-6 z-30"></p>
+                <p id="thankyou-msg" class="text-lg md:text-2xl font-light font-serif text-rose-100 tracking-widest text-center max-w-md hidden opacity-0 transition-opacity duration-[1500ms] italic px-6 z-30 leading-relaxed"></p>
             </div>
 
         </div>
@@ -423,7 +424,7 @@
 
             setTimeout(() => {
                 btnContainer.style.pointerEvents = "auto";
-                btnContainer.classList.remove('opacity-0', 'translate-y-10');
+                btnContainer.classList.remove('opacity-0', 'translate-y-6');
                 btnContainer.classList.add('opacity-100', 'translate-y-0');
                 btn.classList.add('force-clickable');
             }, 7000); 
@@ -462,9 +463,30 @@
             const trapPopup = document.getElementById('popup-trap');
             trapPopup.classList.remove('hidden');
             setTimeout(() => { trapPopup.classList.add('opacity-100'); }, 50);
+            
+            // Layout adjustments for mobile when trap triggers
+            resetNoButtonResponsive();
         }
 
-        function trollNoButton() {
+        function resetNoButtonResponsive() {
+            const noBtn = document.getElementById('no-btn');
+            const container = document.getElementById('trap-actions-container');
+            if (window.innerWidth < 640) {
+                noBtn.style.left = "0px";
+                noBtn.style.bottom = "0px";
+                noBtn.style.top = "auto";
+                noBtn.style.width = "100%";
+            } else {
+                noBtn.style.left = "60%";
+                noBtn.style.top = "12px";
+                noBtn.style.bottom = "auto";
+                noBtn.style.width = "auto";
+            }
+        }
+
+        function trollNoButton(e) {
+            if (e) e.preventDefault(); // Stop mobile double tap issues
+
             const noBtn = document.getElementById('no-btn');
             const warning = document.getElementById('trap-warning');
             const nextGalleryBtn = document.getElementById('gallery-next-btn');
@@ -474,14 +496,29 @@
             nextGalleryBtn.innerHTML = "Next Disabled 🔒";
             warning.classList.remove('hidden');
 
-            const minLeft = 5;  const maxLeft = 70; 
-            const minTop = 10;  const maxTop = 75;  
-
-            const randomX = Math.floor(Math.random() * (maxLeft - minLeft + 1)) + minLeft;
-            const randomY = Math.floor(Math.random() * (maxTop - minTop + 1)) + minTop;
+            const isMobile = window.innerWidth < 640;
             
-            noBtn.style.left = randomX + "%";
-            noBtn.style.top = randomY + "%";
+            if (isMobile) {
+                // Run random bounds inside card safely on mobile devices
+                const minLeft = 5;  const maxLeft = 65;
+                const minTop = 5;   const maxTop = 45;
+                const randomX = Math.floor(Math.random() * (maxLeft - minLeft + 1)) + minLeft;
+                const randomY = Math.floor(Math.random() * (maxTop - minTop + 1)) + minTop;
+                
+                noBtn.style.width = "auto";
+                noBtn.style.bottom = "auto";
+                noBtn.style.left = randomX + "%";
+                noBtn.style.top = randomY + "px";
+            } else {
+                // Desktop absolute logic bounds
+                const minLeft = 5;  const maxLeft = 70; 
+                const minTop = 5;   const maxTop = 45;  
+                const randomX = Math.floor(Math.random() * (maxLeft - minLeft + 1)) + minLeft;
+                const randomY = Math.floor(Math.random() * (maxTop - minTop + 1)) + minTop;
+                
+                noBtn.style.left = randomX + "%";
+                noBtn.style.top = randomY + "px";
+            }
         }
 
         function runTimelineCounter() {
@@ -527,15 +564,15 @@
             
             cinematicInterval = setInterval(() => {
                 if (currentScroll < (textElement.scrollHeight - scrollBox.clientHeight)) {
-                    currentScroll += 0.4; 
+                    currentScroll += 0.35; 
                     scrollBox.scrollTop = currentScroll;
                 }
                 if (currentVolume > 0.05) {
-                    currentVolume -= 0.0015;
+                    currentVolume -= 0.0012;
                     audio.volume = Math.max(0.05, currentVolume);
                 }
-                if (currentScroll > 50) {
-                    let blurFactor = Math.min((currentScroll - 50) / 45, 3.5); 
+                if (currentScroll > 40) {
+                    let blurFactor = Math.min((currentScroll - 40) / 50, 3.2); 
                     textElement.style.filter = `blur(${blurFactor}px)`;
                 }
                 if (currentScroll >= (textElement.scrollHeight - scrollBox.clientHeight - 5)) {
@@ -580,7 +617,7 @@
                     flowerPanel.classList.remove('opacity-0', 'translate-y-4');
                     flowerPanel.classList.add('opacity-100', 'translate-y-0');
                 }
-            }, 65); 
+            }, 60); 
         }
 
         function triggerFlowerEnding() {
@@ -593,14 +630,18 @@
             finalTag.classList.remove('opacity-0');
             finalTag.classList.add('opacity-100');
 
-            ambientPhotos.classList.remove('hidden');
-            const polaroids = document.querySelectorAll('.floating-polaroid');
-            setTimeout(() => {
-                polaroids.forEach(p => p.classList.add('active'));
-            }, 100);
+            // Only trigger ambient floats if desktop container is active
+            if (window.innerWidth >= 768) {
+                ambientPhotos.classList.remove('hidden');
+                const polaroids = document.querySelectorAll('.floating-polaroid');
+                setTimeout(() => {
+                    polaroids.forEach(p => p.classList.add('active'));
+                }, 100);
+            }
 
-            for (let i = 0; i < 40; i++) {
-                setTimeout(() => { createPetal(); }, i * 100);
+            let petalCount = window.innerWidth < 640 ? 25 : 45;
+            for (let i = 0; i < petalCount; i++) {
+                setTimeout(() => { createPetal(); }, i * 110);
             }
 
             // 4.5 Seconds baad triggers the Heartbeat Flash effect before full screen reveal
@@ -608,7 +649,7 @@
                 document.body.classList.add('heartbeat-flash');
                 setTimeout(() => {
                     triggerPhotoClimax();
-                }, 600); // Trigger mid-flash
+                }, 600); 
             }, 4000);
         }
 
@@ -633,7 +674,7 @@
                         
                         // FADE OUT full screen photo and fade out background music completely
                         specialPhoto.style.opacity = "0";
-                        ambientPhotos.style.opacity = "0"; // Smoothly clean up floating fragments
+                        ambientPhotos.style.opacity = "0"; 
                         ambientPhotos.style.transition = "opacity 2.5s ease";
                         
                         let vol = audio.volume;
@@ -675,14 +716,14 @@
                 } else {
                     clearInterval(lastTypewriter);
                 }
-            }, 95);
+            }, 90);
         }
 
         function createPetal() {
             const petal = document.createElement('div');
             petal.className = 'petal';
             petal.style.left = Math.random() * 100 + 'vw';
-            const size = Math.random() * 8 + 6 + 'px';
+            const size = Math.random() * 6 + 6 + 'px';
             petal.style.width = size;
             petal.style.height = size;
             petal.style.setProperty('--fall-speed', Math.random() * 3 + 4 + 's');
@@ -691,10 +732,11 @@
         }
 
         function initSpecialEffects() {
-            for(let i=0; i<80; i++) {
+            let starCount = window.innerWidth < 640 ? 35 : 80;
+            for(let i=0; i<starCount; i++) {
                 let star = document.createElement('div');
                 star.className = 'star';
-                star.style.width = star.style.height = Math.random() * 3 + 'px';
+                star.style.width = star.style.height = Math.random() * 2.5 + 'px';
                 star.style.left = Math.random() * 100 + 'vw';
                 star.style.top = Math.random() * 100 + 'vh';
                 star.style.setProperty('--duration', Math.random() * 3 + 1 + 's');
@@ -716,10 +758,10 @@
                 constructor() {
                     this.x = Math.random() * canvas.width;
                     this.y = canvas.height + 20;
-                    this.size = Math.random() * 10 + 6;
-                    this.speedY = Math.random() * 1 + 0.5;
+                    this.size = Math.random() * 8 + 5;
+                    this.speedY = Math.random() * 0.8 + 0.4;
                     this.opacity = Math.random() * 0.5 + 0.2;
-                    this.swing = Math.random() * 1 - 0.5;
+                    this.swing = Math.random() * 0.8 - 0.4;
                 }
                 update() {
                     this.y -= this.speedY;
@@ -741,7 +783,8 @@
 
             function animate() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
-                if (Math.random() < 0.03) hearts.push(new Heart());
+                let spawnChance = window.innerWidth < 640 ? 0.015 : 0.03;
+                if (Math.random() < spawnChance) hearts.push(new Heart());
                 hearts.forEach((heart, index) => {
                     heart.update();
                     heart.draw();
