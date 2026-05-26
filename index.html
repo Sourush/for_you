@@ -6,6 +6,11 @@
     <title>For Someone Special 🖤</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style>
+        /* Smooth Custom Dark Background Gradient */
+        body {
+            background: radial-gradient(circle at center, #141a24 0%, #0b0c10 100%);
+        }
+
         .star {
             position: absolute;
             background: white;
@@ -13,8 +18,8 @@
             animation: twinkle var(--duration) ease-in-out infinite alternate;
         }
         @keyframes twinkle {
-            0% { opacity: 0.2; transform: scale(0.8); }
-            100% { opacity: 1; transform: scale(1.2); }
+            0% { opacity: 0.1; transform: scale(0.8); }
+            100% { opacity: 0.9; transform: scale(1.3); }
         }
 
         .grid-photo {
@@ -104,22 +109,20 @@
         }
         @keyframes flashOverlay {
             0% { filter: blur(0px) brightness(1); }
-            40% { filter: blur(8px) brightness(0.4); }
-            60% { filter: blur(2px) brightness(0.7); }
+            40% { filter: blur(4px) brightness(0.5); }
+            60% { filter: blur(1px) brightness(0.8); }
             100% { filter: blur(0px) brightness(1); }
         }
     </style>
 </head>
-<body class="bg-[#0b0c10] text-gray-200 font-sans overflow-x-hidden relative min-h-screen select-none">
+<body class="text-gray-200 font-sans overflow-x-hidden relative min-h-screen select-none">
 
-    <!-- Cinematic Pre-loader Timer -->
     <div id="cinematic-timer" class="fixed inset-0 bg-[#0b0c10] z-[100] flex flex-col items-center justify-center transition-opacity duration-1000 p-4">
         <div class="text-center space-y-4 w-full max-w-sm">
             <p class="text-[10px] md:text-xs font-mono tracking-widest text-gray-500 uppercase">Initializing Experience</p>
             <div id="countdown-number" class="text-6xl md:text-8xl font-extrabold text-transparent bg-clip-text bg-gradient-to-b from-[#45f3ff] to-indigo-500">
                 3
             </div>
-            <!-- Click Overlay Trigger for Music Autoplay Rule Fix -->
             <div id="click-prompt" class="text-xs md:text-sm font-light text-rose-400 tracking-wider hidden animate-pulse mt-4 cursor-pointer border border-rose-500/20 px-4 py-2 rounded-full bg-rose-500/5">
                 Click anywhere to enter into memories... 🎧
             </div>
@@ -130,7 +133,6 @@
 
     <canvas id="heartCanvas" class="fixed inset-0 pointer-events-none z-10"></canvas>
 
-    <!-- Floating Background Polaroids Container (Hidden on Mobile for cleaner responsive performance) -->
     <div id="ambient-photos-container" class="absolute inset-0 pointer-events-none overflow-hidden hidden md:block">
         <div class="floating-polaroid" style="top: 15%; left: 8%; --custom-rotate: rotate(-8deg);">
             <img src="images\pic2 (6).jpg">
@@ -143,12 +145,8 @@
         </div>
     </div>
 
-    <!-- POP-UP 2: Emotional Warning -->
     <div id="popup-2" class="fixed inset-0 z-40 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-1000 overflow-hidden">
-        <div class="absolute inset-0 z-[-1] opacity-40 pointer-events-none">
-            <iframe class="w-full h-full object-cover scale-110" src="images\VID-20260512-WA0006.mp4" frameborder="0" allow="autoplay; encrypted-media"></iframe>
-        </div>
-        <div class="bg-[#050508]/90 backdrop-blur-md border border-rose-500/20 p-6 md:p-8 rounded-2xl max-w-sm w-full text-center shadow-2xl mx-4">
+        <div class="bg-[#0c0f14]/95 backdrop-blur-md border border-rose-500/20 p-6 md:p-8 rounded-2xl max-w-sm w-full text-center shadow-2xl mx-4">
             <p class="text-base md:text-lg italic text-rose-300 mb-6">"Every small moment with you is a core memory..."</p>
             <button onclick="revealMainSite()" class="w-full sm:w-auto border border-rose-500/50 hover:bg-rose-500/10 text-rose-400 font-medium px-6 py-2.5 rounded-xl cursor-pointer transition-all force-clickable text-sm">
                 Promise I won't cry 🫠
@@ -156,7 +154,6 @@
         </div>
     </div>
 
-    <!-- POP-UP 3: Trap Card -->
     <div id="popup-trap" class="fixed inset-0 bg-[#050508]/95 z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-1000">
         <div id="trap-card" class="bg-[#1f2833]/90 backdrop-blur-md border border-purple-500/30 p-6 md:p-8 rounded-2xl max-w-sm w-full text-center shadow-2xl relative min-h-[280px] overflow-hidden flex flex-col justify-center items-center mx-4">
             <h3 class="text-base md:text-lg font-medium text-purple-300 mb-2" id="trap-title">Are you enjoying this website? 🫠</h3>
@@ -173,17 +170,9 @@
         </div>
     </div>
 
-    <!-- Global Full-Screen Responsive Video Container -->
-    <div class="fixed inset-0 z-[-1] pointer-events-none overflow-hidden bg-[#0b0c10]">
-        <!-- Dark Overlay Layer to Make Content Legible -->
-        <div class="absolute inset-0 bg-black/40 z-10"></div>
-        <iframe class="w-full h-full object-cover scale-105" src="images\VID-20260512-WA0006.mp4" frameborder="0" allow="autoplay; encrypted-media"></iframe>
-    </div>
-
     <main id="main-content" class="hidden opacity-0 transition-opacity duration-1000 min-h-screen flex flex-col items-center justify-center relative p-4 md:p-6 z-20">
 
-        <!-- SCREEN A: Hey Special Person -->
-        <div id="screen-initial" class="max-w-xl text-center space-y-5 md:space-y-8 transition-all duration-1000 flex flex-col items-center relative min-h-[460px] justify-center w-full px-2">
+        <div id="screen-initial" class="max-w-xl text-center space-y-4 md:space-y-6 transition-all duration-1000 flex flex-col items-center relative min-h-[440px] justify-center w-full px-2">
             
             <div id="teaser-message" class="absolute inset-0 flex items-center justify-center bg-[#0b0c10]/95 z-30 hidden opacity-0 transition-all duration-700 rounded-2xl">
                 <p class="text-sm md:text-lg font-mono text-rose-400 animate-pulse text-center px-4 tracking-wider">
@@ -191,17 +180,17 @@
                 </p>
             </div>
 
-            <div id="initial-main-layout" class="space-y-5 md:space-y-7 flex flex-col items-center transition-opacity duration-500 w-full">
+            <div id="initial-main-layout" class="space-y-4 md:space-y-6 flex flex-col items-center transition-opacity duration-500 w-full">
                 <h1 class="text-2xl md:text-4xl font-extrabold tracking-tight bg-gradient-to-r from-rose-400 via-indigo-300 to-cyan-400 bg-clip-text text-transparent px-2">
                     Hey Special Person...
                 </h1>
                 
-                <div class="inline-block bg-[#1f2833]/90 backdrop-blur-sm p-3 md:p-4 rounded-xl shadow-2xl transform -rotate-1 border border-white/10 max-w-[85%] sm:max-w-xs">
-                    <img src="images\IMG_20260526_225343.jpg" alt="First Memory" class="rounded shadow-inner max-h-52 md:max-h-64 w-full object-cover">
-                    <p class="mt-2.5 font-mono text-[11px] text-gray-400 text-left">📍 Where it all started...</p>
+                <div class="inline-block bg-[#1f2833]/80 backdrop-blur-sm p-2.5 md:p-4 rounded-xl shadow-2xl transform -rotate-1 border border-white/10 max-w-[85%] sm:max-w-xs">
+                    <img src="images\IMG_20260526_225343.jpg" alt="First Memory" class="rounded shadow-inner h-auto max-h-[35vh] md:max-h-64 w-full object-cover">
+                    <p class="mt-2 font-mono text-[11px] text-gray-400 text-left">📍 Where it all started...</p>
                 </div>
 
-                <p class="text-xs md:text-sm lg:text-base leading-relaxed text-gray-200 font-medium max-w-md mx-auto italic px-4 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+                <p class="text-xs md:text-sm lg:text-base leading-relaxed text-gray-300 font-light max-w-md mx-auto italic px-4">
                     "I still remember this exact day. Everything felt so perfect, yet so fleeting... Kuch baatein adhuri hi achhi lagti hain." 💔
                 </p>
             </div>
@@ -213,7 +202,6 @@
             </div>
         </div>
 
-        <!-- SCREEN B: Gallery Grid -->
         <div id="screen-gallery" class="hidden opacity-0 max-w-4xl w-full text-center space-y-8 md:space-y-10 transition-all duration-1000 py-6 flex flex-col items-center px-2">
             <h2 class="text-xl md:text-2xl font-light tracking-widest text-rose-400 uppercase">Unforgotten Chapters</h2>
             
@@ -232,7 +220,7 @@
                 </div>
             </div>
 
-            <p class="text-xs md:text-sm font-light text-gray-300 max-w-xl mx-auto pt-2 leading-relaxed px-4 drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]">
+            <p class="text-xs md:text-sm font-light text-gray-300 max-w-xl mx-auto pt-2 leading-relaxed px-4">
                 Ye saari photos mere paas sirf images nahi hain... ye tumhari sabse payri yaadein hain !
             </p>
 
@@ -243,7 +231,6 @@
             </div>
         </div>
 
-        <!-- SCREEN C: Timer Counter & Dynamic Scroller -->
         <div id="screen-intermediate" class="hidden opacity-0 max-w-xl w-full text-center space-y-6 transition-all duration-1000 py-4 flex flex-col items-center px-2">
             <div class="bg-neutral-950/60 border border-rose-500/10 rounded-2xl px-4 py-3.5 w-full shadow-inner">
                 <p class="text-[9px] md:text-[10px] font-mono tracking-widest text-gray-500 uppercase mb-1">Time passed since our first photo...</p>
@@ -277,7 +264,7 @@
                     <div class="pt-2">
                         <h4 class="text-[10px] font-mono text-neutral-500 mb-1.5">● The Bitter Truth</h4>
                         <p class="text-xs leading-relaxed text-neutral-400 font-light">
-                            Ab shayad sound dheere dideere madham ho rha hai... bilkul hamari kahani ki tarah. Aur ye text jo aap padh rahe ho, dhundla ho raha hai na? Shayad ye screen ka fault nahi... shayad kuch yaadein aankhon me paani ban kar thahar jaati hain. 🫠💔
+                            Ab shayad sound dheere dheere madham ho rha hai... bilkul hamari kahani ki tarah. Aur ye text jo aap padh rahe ho, dhundla ho raha hai na? Shayad ye screen ka fault nahi... shayad kuch yaadein aankhon me paani ban kar thahar jaati hain. 🫠💔
                         </p>
                     </div>
                 </div>
@@ -290,7 +277,6 @@
             </div>
         </div>
 
-        <!-- SCREEN D: THE GRAND CLIMAX -->
         <div id="screen-final" class="max-w-xl w-full text-center space-y-6 md:space-y-8 transition-all duration-1000 py-6 flex flex-col items-center hidden opacity-0 px-2">
             
             <div id="final-main-block" class="space-y-6 md:space-y-8 flex flex-col items-center w-full transition-opacity duration-1000">
@@ -311,17 +297,14 @@
                 </div>
             </div>
 
-            <!-- UPGRADED FULL-SCREEN CLIMAX OVERLAY LAYER -->
             <div id="climax-goodbye-layer" class="fixed inset-0 bg-[#050508] z-50 flex flex-col items-center justify-center hidden opacity-0 transition-opacity duration-1000">
                 
-                <!-- Full Screen Image Container with Vignette effect -->
                 <div id="climax-special-photo" class="absolute inset-0 w-full h-full flex items-center justify-center transition-opacity duration-[2500ms] ease-in-out">
                     <div class="absolute inset-0 bg-gradient-to-t from-[#050508] via-transparent to-[#050508] z-10"></div>
                     <img src="images\IMG_20260526_225343.jpg" class="w-full h-full object-cover opacity-80 filter brightness-90">
                     <p class="absolute bottom-10 md:bottom-12 left-1/2 transform -translate-x-1/2 z-20 font-mono text-[10px] md:text-xs text-gray-400 tracking-widest bg-black/50 backdrop-blur-sm px-4 py-2 rounded-full border border-white/5 whitespace-nowrap">Hamesha ke liye mere dil me... 🔒</p>
                 </div>
 
-                <!-- Last Thank You Text Container -->
                 <p id="thankyou-msg" class="text-lg md:text-2xl font-light font-serif text-rose-100 tracking-widest text-center max-w-md hidden opacity-0 transition-opacity duration-[1500ms] italic px-6 z-30 leading-relaxed"></p>
             </div>
 
@@ -715,11 +698,11 @@
         }
 
         function initSpecialEffects() {
-            let starCount = window.innerWidth < 640 ? 35 : 80;
+            let starCount = window.innerWidth < 640 ? 40 : 100;
             for(let i=0; i<starCount; i++) {
                 let star = document.createElement('div');
                 star.className = 'star';
-                star.style.width = star.style.height = Math.random() * 2.5 + 'px';
+                star.style.width = star.style.height = Math.random() * 2 + 0.5 + 'px';
                 star.style.left = Math.random() * 100 + 'vw';
                 star.style.top = Math.random() * 100 + 'vh';
                 star.style.setProperty('--duration', Math.random() * 3 + 1 + 's');
@@ -741,10 +724,10 @@
                 constructor() {
                     this.x = Math.random() * canvas.width;
                     this.y = canvas.height + 20;
-                    this.size = Math.random() * 8 + 5;
-                    this.speedY = Math.random() * 0.8 + 0.4;
-                    this.opacity = Math.random() * 0.5 + 0.2;
-                    this.swing = Math.random() * 0.8 - 0.4;
+                    this.size = Math.random() * 7 + 4;
+                    this.speedY = Math.random() * 0.7 + 0.3;
+                    this.opacity = Math.random() * 0.4 + 0.2;
+                    this.swing = Math.random() * 0.6 - 0.3;
                 }
                 update() {
                     this.y -= this.speedY;
